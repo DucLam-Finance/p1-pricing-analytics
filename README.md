@@ -1,6 +1,6 @@
 # P1+P2: Commercial Finance Dashboard — Olist E-Commerce
 
-dbt project: Olist raw data → Compatible star schema → Power BI with PVM.
+dbt project: Olist raw data → DuckDB with StarSchema → dbt process (Stagin → Refined → Mart) → Power BI with PVM (on-process)
 
 ## 3-Layer Architecture
 
@@ -23,7 +23,15 @@ seeds:                                                      mart_comments
   seed_cost_margins.csv (COGS%)
   seed_comments.csv (annotations)
 ```
-
+## BU Hierachy
+Group:      Olist Marketplace
+              │
+Division:   ┌─────────────┬──────────────┬─────────────┬──────────────┐
+            Digital &     Personal &     Home &        B2B &
+            Media         Lifestyle      Garden        Services
+              │             │              │              │
+BU:       Technology    Health&Beauty  Home&Living   Auto,Food&Ind
+          Entertain.    Fashion&Sports Gifts&Tools   Office&Services
 ## Table Mapping
 
 | BI_Mapping | Mart table | Key columns |
@@ -47,7 +55,7 @@ seeds:                                                      mart_comments
 
 ```bash
 pip install dbt-duckdb
-cp profiles_example.yml ~/.dbt/profiles.yml
+cp profiles.yml ~/.dbt/profiles.yml
 # Place Olist CSVs in data/
 dbt deps && dbt seed && dbt run && dbt test
 ```
