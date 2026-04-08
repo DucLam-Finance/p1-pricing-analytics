@@ -1,0 +1,29 @@
+# dbt artifacts
+target/
+dbt_packages/
+logs/
+dbt_internal_packages/
+
+# Security - QUAN TRỌNG
+profiles.yml
+.env
+
+# Databases
+*.duckdb
+*.duckdb.wal
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Data files
+data/*.csv
+data/*.xlsx
+data/*.parquet

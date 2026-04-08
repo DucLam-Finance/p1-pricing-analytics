@@ -1,0 +1,64 @@
+version: 2
+
+models:
+  - name: mart_sales
+    description: >
+      Unified Sales fact matching Zebra BI. AC/PL/PY/FC as rows via scenario column.
+      Grain: month × category_group × product_category × customer_state × scenario.
+      PVM decomposition done in Power BI DAX, not here.
+    columns:
+      - name: date_key
+        tests: [not_null]
+      - name: scenario
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['AC', 'PL', 'PY', 'FC']
+      - name: revenue
+        tests: [not_null]
+      - name: cost
+        tests: [not_null]
+
+  - name: mart_sales_detail
+    description: "Order-level AC detail with ALL attributes for drill-down analysis."
+    columns:
+      - name: order_id
+        tests: [not_null]
+      - name: revenue
+        tests: [not_null]
+
+  - name: mart_dim_date
+    columns:
+      - name: date_key
+        tests: [not_null, unique]
+
+  - name: mart_dim_product
+    columns:
+      - name: productid
+        tests: [not_null, unique]
+
+  - name: mart_dim_customer
+    columns:
+      - name: customerid
+        tests: [not_null, unique]
+
+  - name: mart_dim_seller
+    columns:
+      - name: salespersonid
+        tests: [not_null, unique]
+
+  - name: mart_dim_business_unit
+    columns:
+      - name: businessunitid
+        tests: [not_null, unique]
+
+  - name: mart_dim_payment_method
+    columns:
+      - name: payment_type
+        tests: [not_null, unique]
+
+  - name: mart_comments
+    description: "Annotation comments for Zebra BI callout boxes."
+    columns:
+      - name: kpi_id
+        tests: [not_null]

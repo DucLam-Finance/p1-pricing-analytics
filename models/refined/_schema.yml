@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: "Date dimension 2016-2018. Mark as Date Table in Power BI."
+    columns:
+      - name: date_key
+        tests: [not_null, unique]
+
+  - name: dim_customer
+    description: "Customer dimension deduplicated on customer_unique_id. Matches Zebra BI Customer structure."
+    columns:
+      - name: customerid
+        tests: [not_null, unique]
+      - name: customer_unique_id
+        tests: [not_null, unique]
+      - name: region
+        tests: [not_null]
+
+  - name: dim_product
+    description: "Product dimension with English category names, category groups, physical attributes. Matches Zebra BI Product."
+    columns:
+      - name: productid
+        tests: [not_null, unique]
+      - name: product_id
+        description: "Original Olist product_id (hash)"
+        tests: [not_null, unique]
+      - name: product
+        tests: [not_null]
+      - name: productgroupid
+        tests: [not_null]
+
+  - name: dim_seller
+    description: "Seller dimension with location. Matches Zebra BI Salesperson."
+    columns:
+      - name: salespersonid
+        tests: [not_null, unique]
+      - name: seller_id
+        tests: [not_null, unique]
+
+  - name: dim_business_unit
+    description: "BU hierarchy: businessunit → division → group. Matches Zebra BI BusinessUnit."
+    columns:
+      - name: businessunitid
+        tests: [not_null, unique]
+
+  - name: dim_payment_method
+    description: "Payment method lookup with grouping."
+    columns:
+      - name: payment_type
+        tests: [not_null, unique]
+
+  - name: fct_order_items
+    description: >
+      Core enriched fact table. Grain: one row per order line item.
+      Joins ALL staging tables. Preserves ALL attributes for maximum flexibility.
+      Includes derived delivery performance metrics.
+    columns:
+      - name: order_id
+        tests: [not_null]
+      - name: date_key
+        tests: [not_null]
+      - name: productid
+        tests: [not_null]
+      - name: businessunitid
+        tests: [not_null]
+      - name: price
+        tests: [not_null]
